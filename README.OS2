@@ -1,0 +1,77 @@
+This is a port of Common TeX 3.3 for OS/2 using EMX-0.8f.
+
+See the file COPYING for rights, responsibilities, and limitations.
+
+One of the best TeX implementations around is EmTeX.  However, it has
+one "feature" that doesn't utilize the full capabilities of OS/2,
+especially when HPFS is used: long file names are not accepted.  This
+port of Common TeX does not have this restriction.
+
+Features and Limitations
+------------------------
+
+Some limitations of Common Tex:
+
+	o Parts from EmTeX like the tfm and tex input files are
+	  needed.  The DVI programs from EmTeX will also be need if
+	  you want to see actual output.  
+
+
+Here are some basic features of Common TeX:
+
+	o Supports long file names on HPFS partitions.
+	o Will not give "TeX out of memory" errors until you run out
+	  of virtual memory.
+	o Preloads formats, which (marginally) speeds up loading.
+	o Doesn't need TeX format files.
+	o Runs about twice as fast as btexp.
+
+Installation
+------------
+Be sure to put the dll directory of this archive in your LIBPATH!!!
+You can install the executables anywhere.  Then set the environment
+variables TEXFONTS and TEXINPUTS.  If you have EmTeX, make TEXINPUTS
+the same as TEXINPUT and TEXFONTS the same as TEXTFM.  However, you
+must include the drive letter and replace all backslashes with forward
+slashes.  For example, if you have
+
+	set EMTEXDRV=f
+	set TEXINPUT=.;\emtex\texinput
+	set TEXTFM=.;\emtex\tfm;\emtex\fonts\tfm
+
+then do
+
+	set TEXINPUTS=.;f:/emtex/texinput
+	set TEXFONTS=.;f:/emtex/tfm;f:/emtex/fonts/tfm
+
+Usage
+-----
+
+If you want to run LaTeX, use
+
+	latex texfile
+
+You do not need to specify "^&lplain".  Typically, the equivalent
+EmTeX command would be "btexp ^&lplain texfile".
+
+For TeX plain format, use "tex".  This is equivalent to "btexp
+^&plain" in EmTeX.
+
+To create (or update) your own formats, give the following commands:
+
+	initex mystyle \dump
+	emxbind -x initex.exe a.out
+	emxbind -ccore /emx/bin/emxl.exe mytex.exe
+	del core
+	del a.out
+
+Your format is "mystyle" and the resulting command is "mytex.exe"
+which will have "mystyle" preloaded.  Of course, to do this you need
+emxbind to do this.
+
+Recommendations
+---------------
+
+Get a copy of EmTeX first.  Follow the instructions that come with
+EmTeX and make it work first.  Then install Common TeX.
+

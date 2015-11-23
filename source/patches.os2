@@ -1,0 +1,40 @@
+Only in commontex-3.3-os2: exe
+diff -c commontex-3.3/fileio.c commontex-3.3-os2/fileio.c
+*** commontex-3.3/fileio.c	Wed Feb 19 21:07:04 1992
+--- commontex-3.3-os2/fileio.c	Sun Jan 17 21:11:03 1993
+***************
+*** 529,536 ****
+--- 529,546 ----
+  		break;
+  
+  	}
++ #ifdef	OS2
++         /*
++ 	 * Watch for file names that begin with a '/', './' or
++ 	 * have the form 'x:', where "x" is any alphabetic character
++ 	 */
++ 	if (name_of_file[0] == '/' 
++ 	    || (name_of_file[0] == '.' && name_of_file[1] == '/')
++ 	    || (isalpha(name_of_file[0]) && name_of_file[1] == ':')) {
++ #else
+  	if (name_of_file[0] == '/' ||
+  		name_of_file[0] == '.' && name_of_file[1] == '/') {
++ #endif
+  		cur_path = null_str;
+  	}
+  	do {
+***************
+*** 622,628 ****
+--- 632,642 ----
+  	name_of_file = new_str(MAX_STR_SIZE);
+  	area_delimiter = '/';
+  	ext_delimiter = '.';
++ #ifdef	OS2
++ 	path_delimiter = ';';
++ #else	
+  	path_delimiter = ':';
++ #endif
+  	str_texput = "texput";
+  	str_tex = ".tex";
+  	str_dvi = ".dvi";
+Only in commontex-3.3-os2: Makefile.os2

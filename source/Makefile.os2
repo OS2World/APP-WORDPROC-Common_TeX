@@ -1,0 +1,45 @@
+SRC = align.c alloc.c arith.c box.c boxlist.c chr.c \
+	cmd.c cond.c def.c dvi.c error.c eval.c expand.c \
+	fileio.c hyph.c math.c mathlist.c mlst-hlst.c \
+	pack.c page.c par.c print.c \
+	scan.c str.c sym.c tex.c texext.c \
+	tfm.c tok.c toklist.c
+
+OBJ = align.o alloc.o arith.o box.o boxlist.o chr.o \
+	cmd.o cond.o def.o dvi.o error.o eval.o expand.o \
+	fileio.o hyph.o math.o mathlist.o mlst-hlst.o \
+	pack.o page.o par.o print.o \
+	scan.o str.o sym.o tex.o texext.o \
+	tfm.o tok.o toklist.o
+
+CFLAGS = -g -traditional -O2 -DOS2
+LDFLAGS = -g
+
+EMXL = /emx/bin/emxl.exe
+
+initex.exe: ${OBJ}
+	${CC} -o $@ ${LDFLAGS} ${OBJ}
+
+tex.exe: initex.exe
+	-.\initex plain \dump
+	emxbind -x initex.exe a.out
+	-strip a.out
+	emxbind -ccore $(EMXL) a.out tex.exe
+#	undump tex initex
+	rm core a.out
+
+latex.exe: initex.exe
+	-.\initex lplain \dump
+	emxbind -x initex.exe a.out
+	-strip a.out
+	emxbind -ccore $(EMXL) a.out latex.exe
+#	undump latex initex
+	rm core a.out
+
+all: initex.exe tex.exe latex.exe
+
+clean::
+	-rm -f *.o errs
+
+veryclean::clean
+	-rm -f initex tex latex *.log *.dvi *.aux
